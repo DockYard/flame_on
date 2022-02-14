@@ -1,5 +1,5 @@
 defmodule FlameOn do
   @moduledoc """
-  Documentation for `FlameOn`.
+  For Documentation on FlameOn, see the [README](readme.html)
   """
 end
