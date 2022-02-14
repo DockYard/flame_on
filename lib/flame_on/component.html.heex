@@ -1,0 +1,32 @@
+<div>
+  <.form let={f} for={@capture_changeset} phx-submit="capture_schema" phx-target={@myself} disabled={!@capturing?}>
+    <%= label f, :module %>
+    <%= text_input f, :module %>
+    <%= error_tag f, :module %>
+
+    <%= label f, :function %>
+    <%= text_input f, :function %>
+    <%= error_tag f, :function %>
+
+    <%= label f, :arity %>
+    <%= number_input f, :arity %>
+    <%= error_tag f, :arity %>
+
+    <%= label f, :timeout %>
+    <%= number_input f, :timeout %>
+    <%= error_tag f, :timeout %>
+
+    <%= submit "Flame On!" %>
+  </.form><br>
+  <%= if @capturing? do %>Capturing...<br><% end %>
+  <%= if @capture_timed_out? do %>Capture Timed Out<br><% end %>
+
+  <%= if not is_nil(@viewing_block) do %>
+    <%= if @view_block_path do %>
+      <%= for %Block{} = block <- @view_block_path do %>
+      <a href="#" phx-click="view_block" phx-target={@myself} phx-value-id={block.id}><%= block.function %> </a><br>
+      <% end %>
+    <% end %>
+    <.live_component module={FlameOn.SVG} block={@viewing_block} viewbox={@viewbox} parent={@myself} socket={@socket} id="svg_results" />
+  <% end %>
+</div>
