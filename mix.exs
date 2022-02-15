@@ -9,9 +9,9 @@ defmodule FlameOn.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
-      docs: [main: "FlameOn", extras: ["README.md"]],
+      docs: [main: "readme", extras: ["README.md"]],
       package: package(),
-      source_url: "https://github.com/TheFirstAvenger/flame_on"
+      source_url: "https://github.com/DockYard/flame_on"
     ]
   end
 
@@ -29,7 +29,7 @@ defmodule FlameOn.MixProject do
   defp package do
     [
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/TheFirstAvenger/flame_on"}
+      links: %{"GitHub" => "https://github.com/DockYard/flame_on"}
     ]
   end
 
