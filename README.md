@@ -1,8 +1,6 @@
 # Flame On
 
-<p align="center">
-  <image src="assets/images/htorch.png" />
-</p>
+![Flame On - Phoenix LiveDashboard](assets/images/screenshot.png)
 
 Add Flame Graphs to your Phoenix Application or LiveDashboard
 
