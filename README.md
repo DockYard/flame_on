@@ -1,6 +1,8 @@
 # Flame On
 
-![Flame On](htorch.png)
+<p align="center">
+  <image src="assets/images/htorch.png" />
+</p>
 
 Add Flame Graphs to your Phoenix Application or LiveDashboard
 
@@ -23,11 +25,11 @@ And then add Flame On as a LiveDashboard page or a LiveComponent in your LiveVie
 Modify the `live_dashboard` call in your `Router`:
 
 ```elixir
-      live_dashboard "/dashboard",
-        metrics: MyAppWeb.Telemetry,
-        additional_pages: [
-          flame_on: FlameOn.DashboardPage
-        ]
+live_dashboard "/dashboard",
+  metrics: MyAppWeb.Telemetry,
+  additional_pages: [
+    flame_on: FlameOn.DashboardPage
+  ]
 ```
 
 You will now find a `Flame On` tab along the top of the LiveDashboard page
@@ -55,12 +57,36 @@ Flame On should not be run in critical production environments. Flame On uses eF
 Meck swaps out code paths and therefore you will need to include the beam files in your release. By default these are stripped, so in your release definition in `mix.exs` add the `strip_beams: false` flag:
 
 ```elixir
-      releases: [
-        my_app_web: [
-          ...
-          strip_beams: false
-        ],
+releases: [
+  my_app_web: [
+    ...
+    strip_beams: false
+  ],
 ```
 
 You may also need to explicitly include `:meck` as a dependency if it can't find it when trying to run in a release.
 
+## Authors ##
+
+* [Mike Binns](https://github.com/TheFirstAvenger)
+
+[We are very thankful for the many contributors](https://github.com/DockYard/flame_on/graphs/contributors)
+
+## Versioning ##
+
+This library follows [Semantic Versioning](https://semver.org)
+
+## Looking for help with your Elixir project? ##
+
+[At DockYard we are ready to help you build your next Elixir project](https://dockyard.com/phoenix-consulting). We have a unique expertise
+in Elixir and Phoenix development that is unmatched. [Get in touch!](https://dockyard.com/contact/hire-us)
+
+At DockYard we love Elixir! You can [read our Elixir blog posts](https://dockyard.com/blog/categories/elixir)
+
+## Legal ##
+
+[DockYard](https://dockyard.com/), Inc. © 2022
+
+[@DockYard](https://twitter.com/DockYard)
+
+[Licensed under the MIT license](https://www.opensource.org/licenses/mit-license.php)

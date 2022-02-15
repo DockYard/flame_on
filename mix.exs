@@ -9,7 +9,7 @@ defmodule FlameOn.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
-      docs: [main: "readme", extras: ["README.md"]],
+      docs: docs(),
       package: package(),
       source_url: "https://github.com/DockYard/flame_on"
     ]
@@ -20,6 +20,14 @@ defmodule FlameOn.MixProject do
     [
       extra_applications: [:logger]
     ]
+  end
+
+  defp docs() do
+   [
+     main: "readme",
+     assets: "assets/",
+     extras: ["README.md"]
+     ]
   end
 
   def description do
