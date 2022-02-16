@@ -3,25 +3,24 @@ defmodule FlameOn.SVG do
   alias FlameOn.Parser.Block
 
   def render(assigns) do
-    %Block{} = block = Map.fetch!(assigns, :block)
-    block_height = block_height(block)
+    %Block{} = top_block = Map.fetch!(assigns, :block)
 
     assigns =
       assigns
-      |> assign(:blocks, List.flatten(flatten(block)))
-      |> assign(:block_height, block_height)
-      |> assign(:viewbox, viewbox_for_block(block))
+      |> assign(:blocks, List.flatten(flatten(top_block)))
+      |> assign(:duration_ratio, 1000 / top_block.duration)
+      |> assign(:block_height, 25)
+      |> assign(:top_block, top_block)
 
     ~H"""
-    <svg width="100%" height="100%" viewbox={@viewbox}>
+    <svg width="1000" height={@block_height * top_block.max_child_level}>
+    <!-- <%= inspect %Block{@top_block | children: []} %> -->
       <%= for block <- @blocks do %>
-        <%= render_flame_on_block(%{block: block, block_height: @block_height, total_duration: @block.duration, parent: @parent, socket: @socket}) %>
+        <%= render_flame_on_block(%{block: block, block_height: @block_height, duration_ratio: @duration_ratio, top_block: @top_block, parent: @parent, socket: @socket}) %>
       <% end %>
     </svg>
     """
   end
-
-  def block_height(%Block{duration: duration}), do: trunc(duration / 100_000 * 25)
 
   defp render_flame_on_block(%{block: %Block{function: nil}}), do: ""
 
@@ -29,10 +28,10 @@ defmodule FlameOn.SVG do
     color = color_for_function(assigns.block.function)
 
     ~H"""
-    <svg width={@block.duration / 100} height={@block_height * 0.95} x={@block.absolute_start / 100} y={@block.level * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id} style="cursor: pointer;">
+    <svg width={trunc(@block.duration * @duration_ratio)} height={@block_height} x={(@block.absolute_start - @top_block.absolute_start) * @duration_ratio} y={(@block.level - @top_block.level) * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id} style="cursor: pointer;">
       <rect width="100%" height="100%" style={"fill: #{color}; stroke: white;"}></rect>
       <text x={@block_height/4} y={@block_height * 0.5} font-size={@block_height * 0.5} font-family="monospace" dominant-baseline="middle"><%=@block.function %></text>
-      <title><%= @block.duration %>&micro;s (<%= trunc((@block.duration * 100) / @total_duration) %>%) <%=@block.function %></title>
+      <title><%= @block.duration %>&micro;s (<%= trunc((@block.duration * 100) / @top_block.duration) %>%) <%=@block.function %></title>
     </svg>
     """
   end
@@ -58,11 +57,5 @@ defmodule FlameOn.SVG do
     else
       str
     end
-  end
-
-  defp viewbox_for_block(%Block{duration: duration, max_child_level: max_child_level} = block) do
-    block_height = FlameOn.SVG.block_height(block)
-
-    "#{trunc(block.absolute_start / 100)} #{block_height * block.level} #{trunc(duration / 100)} #{block_height * (max_child_level + 1)}"
   end
 end
