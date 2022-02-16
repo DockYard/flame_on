@@ -29,13 +29,11 @@ defmodule FlameOn.SVG do
     color = color_for_function(assigns.block.function)
 
     ~H"""
-    <a href="#" phx-click="view_block" phx-target={@parent} phx-value-id={@block.id}><%= @block.function %>
-      <svg width={@block.duration / 100} height={@block_height * 0.95} x={@block.absolute_start / 100} y={@block.level * @block_height} >
-        <rect width="100%" height="100%" style={"fill: #{color}; stroke: white;"}></rect>
-        <text x={@block_height/4} y={@block_height * 0.5} font-size={@block_height * 0.5} font-family="monospace" dominant-baseline="middle"><%=@block.function %></text>
-        <title><%= @block.duration %>&micro;s (<%= trunc((@block.duration * 100) / @total_duration) %>%) <%=@block.function %></title>
-      </svg>
-    </a>
+    <svg width={@block.duration / 100} height={@block_height * 0.95} x={@block.absolute_start / 100} y={@block.level * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id} style="cursor: pointer;">
+      <rect width="100%" height="100%" style={"fill: #{color}; stroke: white;"}></rect>
+      <text x={@block_height/4} y={@block_height * 0.5} font-size={@block_height * 0.5} font-family="monospace" dominant-baseline="middle"><%=@block.function %></text>
+      <title><%= @block.duration %>&micro;s (<%= trunc((@block.duration * 100) / @total_duration) %>%) <%=@block.function %></title>
+    </svg>
     """
   end
 
