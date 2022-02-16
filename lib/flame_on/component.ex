@@ -35,7 +35,6 @@ defmodule FlameOn.Component do
       |> assign(:root_block, root_block)
       |> assign(:viewing_block, root_block)
       |> assign(:view_block_path, [])
-      |> assign(:viewbox, viewbox_for_block(root_block))
 
     {:ok, socket}
   end
@@ -57,7 +56,6 @@ defmodule FlameOn.Component do
         |> assign(:root_block, nil)
         |> assign(:capture_changeset, CaptureSchema.changeset())
         |> assign(:viewing_block, nil)
-        |> assign(:viewbox, nil)
         |> assign(:view_block_path, [])
         |> assign(:capture_timed_out?, false)
         |> assign(:id, assigns.id)
@@ -103,7 +101,6 @@ defmodule FlameOn.Component do
       socket
       |> assign(:viewing_block, view_block)
       |> assign(:view_block_path, Enum.reverse(view_block_path_r))
-      |> assign(:viewbox, viewbox_for_block(view_block))
 
     {:noreply, socket}
   end
@@ -130,11 +127,5 @@ defmodule FlameOn.Component do
       arity: arity,
       timeout: timeout
     }
-  end
-
-  defp viewbox_for_block(%Block{duration: duration, max_child_level: max_child_level} = block) do
-    block_height = FlameOn.SVG.block_height(block)
-
-    "#{trunc(block.absolute_start / 100)} #{block_height * block.level} #{trunc(duration / 100)} #{block_height * (max_child_level + 1)}"
   end
 end

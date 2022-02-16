@@ -7,17 +7,10 @@ defmodule FlameOn.SVG do
     block_height = block_height(block)
 
     assigns =
-      if is_nil(assigns.viewbox) do
-        assign(
-          assigns,
-          :viewbox,
-          "0 0 #{block.duration} #{block_height * (block.max_child_level + 1)}"
-        )
-      else
-        assigns
-      end
+      assigns
       |> assign(:blocks, List.flatten(flatten(block)))
       |> assign(:block_height, block_height)
+      |> assign(:viewbox, viewbox_for_block(block))
 
     ~H"""
     <svg width="100%" height="100%" viewbox={@viewbox}>
@@ -67,5 +60,11 @@ defmodule FlameOn.SVG do
     else
       str
     end
+  end
+
+  defp viewbox_for_block(%Block{duration: duration, max_child_level: max_child_level} = block) do
+    block_height = FlameOn.SVG.block_height(block)
+
+    "#{trunc(block.absolute_start / 100)} #{block_height * block.level} #{trunc(duration / 100)} #{block_height * (max_child_level + 1)}"
   end
 end
