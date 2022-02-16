@@ -14,7 +14,21 @@ defmodule FlameOn.SVG do
 
     ~H"""
     <svg width="1000" height={@block_height * top_block.max_child_level}>
-    <!-- <%= inspect %Block{@top_block | children: []} %> -->
+    <style>
+      svg > svg {
+        cursor: pointer;
+      }
+
+      svg > svg > rect {
+        stroke: white;
+      }
+
+      svg > svg > text {
+        font-size: <%= @block_height / 2 %>px;
+        font-family: monospace;
+        dominant-baseline: middle;
+      }
+    </style>
       <%= for block <- @blocks do %>
         <%= render_flame_on_block(%{block: block, block_height: @block_height, duration_ratio: @duration_ratio, top_block: @top_block, parent: @parent, socket: @socket}) %>
       <% end %>
@@ -28,9 +42,9 @@ defmodule FlameOn.SVG do
     color = color_for_function(assigns.block.function)
 
     ~H"""
-    <svg width={trunc(@block.duration * @duration_ratio)} height={@block_height} x={(@block.absolute_start - @top_block.absolute_start) * @duration_ratio} y={(@block.level - @top_block.level) * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id} style="cursor: pointer;">
-      <rect width="100%" height="100%" style={"fill: #{color}; stroke: white;"}></rect>
-      <text x={@block_height/4} y={@block_height * 0.5} font-size={@block_height * 0.5} font-family="monospace" dominant-baseline="middle"><%=@block.function %></text>
+    <svg width={trunc(@block.duration * @duration_ratio)} height={@block_height} x={(@block.absolute_start - @top_block.absolute_start) * @duration_ratio} y={(@block.level - @top_block.level) * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id}>
+      <rect width="100%" height="100%" style={"fill: #{color};"}></rect>
+      <text x={@block_height/4} y={@block_height * 0.5}><%=@block.function %></text>
       <title><%= @block.duration %>&micro;s (<%= trunc((@block.duration * 100) / @top_block.duration) %>%) <%=@block.function %></title>
     </svg>
     """
