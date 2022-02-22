@@ -1,22 +1,134 @@
-<div>
-  <.form let={f} for={@capture_changeset} phx-submit="capture_schema" phx-target={@myself} disabled={!@capturing?}>
-    <%= label f, :module %>
-    <%= text_input f, :module %>
-    <%= error_tag f, :module %>
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <style>
+    .flame-on-form {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) auto;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        "label1 label2 label3 label4 ."
+        "input1 input2 input3 input4 submit"
+        "error1 error2 error3 error4 .";
+      align-items: flex-end;
+      column-gap: 8px;
+      width: 100%;
+    }
 
-    <%= label f, :function %>
-    <%= text_input f, :function %>
-    <%= error_tag f, :function %>
+    label {
+      margin-bottom: 0.25rem;
+      font-size: .875rem;
+    }
 
-    <%= label f, :arity %>
-    <%= number_input f, :arity %>
-    <%= error_tag f, :arity %>
+    .label1 {
+      grid-area: label1;
+    }
 
-    <%= label f, :timeout %>
-    <%= number_input f, :timeout %>
-    <%= error_tag f, :timeout %>
+    .label2 {
+      grid-area: label2;
+    }
 
-    <%= submit "Flame On!" %>
+    .label3 {
+      grid-area: label3;
+    }
+
+    .label4 {
+      grid-area: label4;
+    }
+
+    input {
+      padding: 0.25rem 0.5rem;
+      font-size: .875rem;
+      border-radius: 6px;
+      color: rgb(128, 128, 128);
+      background-color: rgb(255, 255, 255);
+      border: 1px solid rgb(165, 165, 165);    
+      transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+      outline-offset: -2px;
+      -webkit-appearance: none;
+    }
+
+    input:focus {
+      color: rgb(75, 75, 75);
+      border-color: rgb(75, 75, 75);
+      outline: 0;
+      box-shadow: 0 0 0 1px rgb(25, 25, 25);
+    }
+
+    .input1 {
+      grid-area: input1;
+    }
+
+    .input2 {
+      grid-area: input2;
+    }
+
+    .input3 {
+      grid-area: input3;
+    }
+
+    .input4 {
+      grid-area: input4;
+    }
+
+    .fo-error {
+      color: rgb(255, 0, 0);
+      font-size: .875rem;
+    }
+
+    .error1 {
+      grid-area: error1;
+    }
+
+    .error2 {
+      grid-area: error2;
+    }
+
+    .error3 {
+      grid-area: error3;
+    }
+
+    .error4 {
+      grid-area: error4;
+    }
+
+    .submit {
+      grid-area: submit;
+      border-radius: 6px;
+      padding: 0.25rem 0.5rem;
+      background-color: rgb(200, 200, 200);
+      color: rgb(25, 25, 25);
+      border: 1px solid rgb(75, 75, 75);
+      outline: 0;
+      font-size: .875rem;
+      transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+
+    .submit:focus { 
+      box-shadow: 0 0 0 1px rgb(25, 25, 25);
+    }
+
+    .submit:disabled {
+      color: rgb(150, 150, 150);
+      cursor: not-allowed;
+    }
+  </style>
+  <.form let={f} for={@capture_changeset} phx-submit="capture_schema" phx-change="validate" phx-target={@myself} disabled={!@capturing?} class="flame-on-form">
+    <%= label f, :module, class: "label1"%>
+    <%= text_input f, :module, class: "input1" %>
+    <%= error_tag f, :module, "fo-error error1" %>
+
+    <%= label f, :function, class: "label2" %>
+    <%= text_input f, :function, class: "input2" %>
+    <%= error_tag f, :function, "fo-error error2" %>
+
+    <%= label f, :arity, class: "label3" %>
+    <%= number_input f, :arity, class: "input3" %>
+    <%= error_tag f, :arity, "fo-error error3" %>
+
+    <%= label f, :timeout, class: "label4" %>
+    <%= number_input f, :timeout, class: "input4"%>
+    <%= error_tag f, :timeout, "fo-error error4" %>
+    
+    <%= submit "Flame On!", class: "submit", disabled: !@capture_changeset.valid? %>
   </.form><br>
   <%= if @capturing? do %>Capturing...<br><% end %>
   <%= if @capture_timed_out? do %>Capture Timed Out<br><% end %>

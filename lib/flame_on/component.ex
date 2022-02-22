@@ -10,6 +10,7 @@ defmodule FlameOn.Component do
   defmodule CaptureSchema do
     use Ecto.Schema
     import Ecto.Changeset
+    alias Ecto.Changeset
 
     schema "capture" do
       field :module, :string
@@ -24,6 +25,52 @@ defmodule FlameOn.Component do
       %__MODULE__{}
       |> cast(attrs, [:module, :function, :arity, :timeout])
       |> validate_required([:module, :function, :arity, :timeout])
+      |> validate_module()
+      |> validate_function_arity()
+    end
+
+    def validate_module(%Changeset{valid?: false} = changeset), do: changeset
+
+    def validate_module(changeset) do
+      module_str = get_field(changeset, :module)
+
+      module =
+        try do
+          String.to_existing_atom(module_str)
+        rescue
+          ArgumentError -> nil
+        end
+
+      if is_nil(module) or (!function_exported?(module, :__info__, 1) and !:erlang.module_loaded(module)) do
+        if String.contains?(module_str, ".") and !String.starts_with?(module_str, "Elixir.") do
+          add_error(changeset, :module, "Elixir modules must start with \"Elixir.\"")
+        else
+          add_error(changeset, :module, "Module does not exist")
+        end
+      else
+        changeset
+      end
+    end
+
+    def validate_function_arity(%Changeset{valid?: false} = changeset), do: changeset
+
+    def validate_function_arity(changeset) do
+      module = changeset |> get_field(:module) |> String.to_existing_atom()
+      function_str = get_field(changeset, :function)
+      arity = get_field(changeset, :arity)
+
+      function =
+        try do
+          String.to_existing_atom(function_str)
+        rescue
+          ArgumentError -> nil
+        end
+
+      if is_nil(function) or !function_exported?(module, function, arity) do
+        add_error(changeset, :function, "No #{function}/#{arity} function on #{module}")
+      else
+        changeset
+      end
     end
   end
 
@@ -89,6 +136,15 @@ defmodule FlameOn.Component do
 
     socket = assign(socket, :capture_changeset, changeset)
     {:noreply, socket}
+  end
+
+  def handle_event("validate", %{"capture_schema" => attrs}, socket) do
+    changeset =
+      attrs
+      |> CaptureSchema.changeset()
+      |> Map.put(:action, :insert)
+
+    {:noreply, assign(socket, :capture_changeset, changeset)}
   end
 
   def handle_event("view_block", %{"id" => id}, socket) do
