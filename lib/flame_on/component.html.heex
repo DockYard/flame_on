@@ -136,7 +136,7 @@
   <%= if not is_nil(@viewing_block) do %>
     <%= if @view_block_path do %>
       <%= for %Block{} = block <- @view_block_path do %>
-      <a href="#" phx-click="view_block" phx-target={@myself} phx-value-id={block.id} style="font-size: 12.5px; font-family: monospace"><%= block.function %> </a><br>
+      <a href="#" phx-click="view_block" phx-target={@myself} phx-value-id={block.id} style="font-size: 12.5px; font-family: monospace"><%= block.function %> </a>
       <% end %>
     <% end %>
     <.live_component module={FlameOn.SVG} block={@viewing_block} parent={@myself} socket={@socket} id="svg_results" />
