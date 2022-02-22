@@ -4,7 +4,7 @@ defmodule FlameOn.MixProject do
   def project do
     [
       app: :flame_on,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -23,11 +23,11 @@ defmodule FlameOn.MixProject do
   end
 
   defp docs() do
-   [
-     main: "readme",
-     assets: "assets/",
-     extras: ["README.md"]
-     ]
+    [
+      main: "readme",
+      assets: "assets/",
+      extras: ["README.md"]
+    ]
   end
 
   def description do
