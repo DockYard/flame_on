@@ -4,6 +4,9 @@
 
 Add Flame Graphs to your Phoenix Application or LiveDashboard
 
+## Getting Started
+
+For more information on flame graphs and an introduction to Flame On, see [the announcement blog post](https://dockyard.com/blog/2022/02/22/profiling-elixir-applications-with-flame-graphs-and-flame-on)
 ## Installation
 
 Add `:flame_on` to your dependencies:
