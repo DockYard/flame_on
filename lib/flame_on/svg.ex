@@ -46,7 +46,7 @@ defmodule FlameOn.SVG do
     <svg width={Enum.max([trunc(@block.duration * @duration_ratio), 1])} height={@block_height} x={(@block.absolute_start - @top_block.absolute_start) * @duration_ratio} y={(@block.level - @top_block.level) * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id}>
       <rect width="100%" height="100%" style={"fill: #{color};"}></rect>
       <text x={@block_height/4} y={@block_height * 0.5}><%=@block.function %></text>
-      <title><%= @block.duration %>&micro;s (<%= trunc((@block.duration * 100) / @top_block.duration) %>%) <%=@block.function %></title>
+      <title><%= format_integer(@block.duration) %>&micro;s (<%= trunc((@block.duration * 100) / @top_block.duration) %>%) <%=@block.function %></title>
     </svg>
     """
   end
@@ -72,5 +72,14 @@ defmodule FlameOn.SVG do
     else
       str
     end
+  end
+
+  defp format_integer(integer) do
+    integer
+    |> Integer.to_charlist()
+    |> Enum.reverse()
+    |> Enum.chunk_every(3)
+    |> Enum.join(",")
+    |> String.reverse()
   end
 end
