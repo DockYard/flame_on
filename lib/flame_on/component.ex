@@ -106,6 +106,7 @@ defmodule FlameOn.Component do
         |> assign(:view_block_path, [])
         |> assign(:capture_timed_out?, false)
         |> assign(:id, assigns.id)
+        |> assign(:target_node, Map.get(assigns, :node, Node.self()))
       else
         socket
       end
@@ -124,12 +125,15 @@ defmodule FlameOn.Component do
           values.module,
           values.function,
           values.arity,
-          self(),
-          socket.assigns.id,
-          values.timeout
+          reply_pid: self(),
+          reply_id: socket.assigns.id,
+          timeout: values.timeout,
+          target_node: socket.assigns.target_node
         )
 
-        assign(socket, :capturing?, true)
+        socket
+        |> assign(:capturing?, true)
+        |> assign(:capture_timed_out?, false)
       else
         socket
       end
@@ -183,5 +187,13 @@ defmodule FlameOn.Component do
       arity: arity,
       timeout: timeout
     }
+  end
+
+  defp target_or_local_node(node) do
+    if node == Node.self() do
+      "local node"
+    else
+      "node #{node}"
+    end
   end
 end

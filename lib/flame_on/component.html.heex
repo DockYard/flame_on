@@ -130,7 +130,7 @@
     
     <%= submit "Flame On!", class: "submit", disabled: !@capture_changeset.valid? %>
   </.form><br>
-  <%= if @capturing? do %>Capturing...<br><% end %>
+  <%= if @capturing? do %>Capturing on <%= target_or_local_node(@target_node) %>...<br><% end %>
   <%= if @capture_timed_out? do %>Capture Timed Out<br><% end %>
 
   <%= if not is_nil(@viewing_block) do %>
