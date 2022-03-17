@@ -14,7 +14,7 @@ Add `:flame_on` to your dependencies:
 ```elixir
 def deps do
   [
-    {:flame_on, "~> 0.3.0"}
+    {:flame_on, "~> 0.4.0"}
   ]
 end
 ```

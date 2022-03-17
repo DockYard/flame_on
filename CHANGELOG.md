@@ -1,6 +1,6 @@
 # Changelog
 
-## NEXT
+## 0.4.0
 
 * Allow targeting a node to run on, and honor dashboard node switcher
 * Add commas to integers in tooltips for readability
