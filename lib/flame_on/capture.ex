@@ -4,9 +4,11 @@ defmodule FlameOn.Capture do
 
   def capture(module, function, arity, opts) do
     target_node = Keyword.get(opts, :target_node, Node.self())
+    ref = make_ref()
 
-    Node.spawn(target_node, __MODULE__, :__local_capture__, [
+    Node.spawn_link(target_node, __MODULE__, :__local_capture__, [
       self(),
+      ref,
       module,
       function,
       arity,
@@ -14,14 +16,14 @@ defmodule FlameOn.Capture do
     ])
 
     receive do
-      {:__local_capture_start__, :success} -> :ok
-      {:__local_capture_start__, :error, error} -> raise "Node.spawn_link failed with error: #{inspect(error)}"
+      {^ref, :success} -> :ok
+      {^ref, :error, error} -> raise "Node.spawn_link failed with error: #{inspect(error)}"
     after
       5_000 -> raise "__local_capture__ failed due to timeout"
     end
   end
 
-  def __local_capture__(from, module, function, arity, opts) do
+  def __local_capture__(from, ref, module, function, arity, opts) do
     reply_pid = Keyword.get(opts, :reply_pid, self())
     reply_id = Keyword.fetch!(opts, :reply_id)
     timeout = Keyword.get(opts, :timeout, 15_000)
@@ -30,7 +32,7 @@ defmodule FlameOn.Capture do
     File.mkdir!(@output_directory)
 
     :ok = :eflambe.capture({module, function, arity}, 1, output_directory: @output_directory)
-    send(from, {:__local_capture_start__, :success})
+    send(from, {ref, :success})
     watch_output_directory(reply_pid, reply_id, timeout)
   rescue
     e -> send(from, {:__local_capture_start__, :error, e})
