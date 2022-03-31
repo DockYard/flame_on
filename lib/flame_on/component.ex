@@ -1,11 +1,12 @@
 defmodule FlameOn.Component do
   use Phoenix.LiveComponent
   use Phoenix.HTML
-  import Ecto.Changeset
 
+  import Ecto.Changeset
   import FlameOn.ErrorHelpers
 
-  alias FlameOn.Parser.Block
+  alias FlameOn.Capture.Block
+  alias FlameOn.Capture.Config
 
   defmodule CaptureSchema do
     use Ecto.Schema
@@ -67,14 +68,14 @@ defmodule FlameOn.Component do
         end
 
       if is_nil(function) or !function_exported?(module, function, arity) do
-        add_error(changeset, :function, "No #{function}/#{arity} function on #{module}")
+        add_error(changeset, :function, "No #{function_str}/#{arity} function on #{module}")
       else
         changeset
       end
     end
   end
 
-  def update(%{flame_on_results: root_block}, socket) do
+  def update(%{flame_on_update: root_block}, socket) do
     socket =
       socket
       |> assign(:capturing?, false)
@@ -119,17 +120,17 @@ defmodule FlameOn.Component do
 
     socket =
       if changeset.valid? do
-        values = changeset_to_atom_values(changeset)
+        config =
+          Config.new(
+            Ecto.Changeset.fetch_field!(changeset, :module) |> String.to_existing_atom(),
+            Ecto.Changeset.fetch_field!(changeset, :function) |> String.to_existing_atom(),
+            Ecto.Changeset.fetch_field!(changeset, :arity),
+            Ecto.Changeset.fetch_field!(changeset, :timeout),
+            socket.assigns.target_node,
+            {:live_component, self(), socket.assigns.id}
+          )
 
-        FlameOn.Capture.capture(
-          values.module,
-          values.function,
-          values.arity,
-          reply_pid: self(),
-          reply_id: socket.assigns.id,
-          timeout: values.timeout,
-          target_node: socket.assigns.target_node
-        )
+        FlameOn.Capture.capture(config)
 
         socket
         |> assign(:capturing?, true)
@@ -173,20 +174,6 @@ defmodule FlameOn.Component do
       false -> false
       tail -> [%Block{block | children: nil} | tail]
     end
-  end
-
-  defp changeset_to_atom_values(%Ecto.Changeset{} = changeset) do
-    module = Ecto.Changeset.fetch_field!(changeset, :module)
-    function = Ecto.Changeset.fetch_field!(changeset, :function)
-    arity = Ecto.Changeset.fetch_field!(changeset, :arity)
-    timeout = Ecto.Changeset.fetch_field!(changeset, :timeout)
-
-    %{
-      module: String.to_existing_atom(module),
-      function: String.to_existing_atom(function),
-      arity: arity,
-      timeout: timeout
-    }
   end
 
   defp target_or_local_node(node) do
