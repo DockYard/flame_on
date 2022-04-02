@@ -1,7 +1,7 @@
 defmodule FlameOn.Capture.Trace do
   alias FlameOn.Capture.Server
 
-  @flags [:call, :return_to, :running, :procs, :arity, :timestamp, :set_on_spawn]
+  @flags [:call, :return_to, :running, :arity, :timestamp, :set_on_spawn]
   def start_trace(tracer) do
     match_spec = [{:_, [], [{:message, {{:cp, {:caller}}}}]}]
     :erlang.trace_pattern(:on_load, match_spec, [:local])
