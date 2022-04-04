@@ -7,6 +7,8 @@ defmodule FlameOn.Capture.Server do
   alias FlameOn.Capture.Server.State
   alias FlameOn.Capture.Server.Stack
 
+  require Logger
+
   defmodule State do
     defstruct stack: [], config: nil, trace_started?: false
   end
@@ -36,21 +38,25 @@ defmodule FlameOn.Capture.Server do
   end
 
   def handle_info({:trace_ts, _, :call, mfa, _, timestamp}, %State{stack: stack} = state) do
+    Logger.debug("flame_on trace: call #{inspect(mfa)}, stack_size: #{length(stack)}")
     stack = Stack.handle_trace_call(stack, mfa, microseconds(timestamp))
     {:noreply, %State{state | stack: stack}}
   end
 
   def handle_info({:trace_ts, _, :return_to, mfa, timestamp}, %State{stack: stack} = state) do
+    Logger.debug("flame_on trace: return_to #{inspect(mfa)}, stack_size: #{length(stack)}")
     stack = Stack.handle_trace_return_to(stack, mfa, microseconds(timestamp))
     {:noreply, %State{state | stack: stack}}
   end
 
-  def handle_info({:trace_ts, _, :out, _mfa, timestamp}, %State{stack: stack} = state) do
+  def handle_info({:trace_ts, _, :out, mfa, timestamp}, %State{stack: stack} = state) do
+    Logger.debug("flame_on trace: out #{inspect(mfa)}, stack_size: #{length(stack)}")
     stack = Stack.handle_trace_call(stack, :sleep, microseconds(timestamp))
     {:noreply, %State{state | stack: stack}}
   end
 
-  def handle_info({:trace_ts, _, :in, _mfa, timestamp}, %State{stack: stack} = state) do
+  def handle_info({:trace_ts, _, :in, mfa, timestamp}, %State{stack: stack} = state) do
+    Logger.debug("flame_on trace: in #{inspect(mfa)}, stack_size: #{length(stack)}")
     stack = Stack.handle_trace_return_to(stack, :sleep, microseconds(timestamp))
     {:noreply, %State{state | stack: stack}}
   end
