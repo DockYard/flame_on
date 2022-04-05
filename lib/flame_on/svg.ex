@@ -1,6 +1,6 @@
 defmodule FlameOn.SVG do
   use Phoenix.LiveComponent
-  alias FlameOn.Parser.Block
+  alias FlameOn.Capture.Block
 
   def render(assigns) do
     %Block{} = top_block = Map.fetch!(assigns, :block)
@@ -45,8 +45,8 @@ defmodule FlameOn.SVG do
     ~H"""
     <svg width={Enum.max([trunc(@block.duration * @duration_ratio), 1])} height={@block_height} x={(@block.absolute_start - @top_block.absolute_start) * @duration_ratio} y={(@block.level - @top_block.level) * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id}>
       <rect width="100%" height="100%" style={"fill: #{color};"}></rect>
-      <text x={@block_height/4} y={@block_height * 0.5}><%=@block.function %></text>
-      <title><%= format_integer(@block.duration) %>&micro;s (<%= trunc((@block.duration * 100) / @top_block.duration) %>%) <%=@block.function %></title>
+      <text x={@block_height/4} y={@block_height * 0.5}><%= mfa_to_string(@block.function) %></text>
+      <title><%= format_integer(@block.duration) %>&micro;s (<%= trunc((@block.duration * 100) / @top_block.duration) %>%) <%= mfa_to_string(@block.function) %></title>
     </svg>
     """
   end
@@ -55,10 +55,21 @@ defmodule FlameOn.SVG do
     [block | Enum.map(children, &flatten/1)]
   end
 
-  defp color_for_function("Elixir." <> rest), do: color_for_function(rest)
+  defp color_for_function({module, _, _}) do
+    case "#{module}" do
+      "Elixir." <> rest -> rest
+      other -> other
+    end
+    |> String.split(".")
+    |> hd()
+    |> color_for_module()
+  end
 
-  defp color_for_function(function) do
-    module = function |> String.split(":") |> hd() |> String.split(".") |> hd()
+  defp color_for_function(:sleep) do
+    color_for_module("sleep")
+  end
+
+  defp color_for_module(module) do
     red = :erlang.phash2(module <> "red", 180) |> Kernel.+(75) |> Integer.to_string(16)
     green = :erlang.phash2(module <> "green", 180) |> Kernel.+(75) |> Integer.to_string(16)
     blue = :erlang.phash2(module <> "blue", 180) |> Kernel.+(75) |> Integer.to_string(16)
@@ -81,5 +92,19 @@ defmodule FlameOn.SVG do
     |> Enum.chunk_every(3)
     |> Enum.join(",")
     |> String.reverse()
+  end
+
+  def mfa_to_string({m, f, a}) do
+    m =
+      case "#{m}" do
+        "Elixir." <> rest -> rest
+        other -> other
+      end
+
+    "#{m}.#{f}/#{a}"
+  end
+
+  def mfa_to_string(mfa) do
+    inspect(mfa)
   end
 end
