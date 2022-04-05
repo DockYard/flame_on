@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 0.5.0
 
 * Rewrite underlying tracing/capture engine
 ## 0.4.0
