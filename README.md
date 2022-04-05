@@ -51,11 +51,11 @@ Clicking a block will zoom the flamegraph to that block and recalculate the perc
 
 ## Running in Production
 
-Flame On should not be run in critical production environments. Flame On uses eFlambe, which uses Meck under the hood. This swaps out beam code paths and injects mock code that includes tracing. If you do need to use Flame On in a critical production node to diagnose a specific issue, I recommend rebuilding or restarting that node after running it.
+Flame On should not be run in critical production environments. Flame On uses `:meck` under the hood. This swaps out beam code paths and injects mock code that includes tracing. If you do need to use Flame On in a critical production node to diagnose a specific issue, I recommend rebuilding or restarting that node after running it.
 
 ## Running in a Release
 
-Meck swaps out code paths and therefore you will need to include the beam files in your release. By default these are stripped, so in your release definition in `mix.exs` add the `strip_beams: false` flag:
+`:meck` swaps out code paths and therefore you will need to include the beam files in your release. By default these are stripped, so in your release definition in `mix.exs` add the `strip_beams: false` flag:
 
 ```elixir
 releases: [
@@ -66,6 +66,10 @@ releases: [
 ```
 
 You may also need to explicitly include `:meck` as a dependency if it can't find it when trying to run in a release.
+
+## Credit
+
+Credit to [eFlambe](https://github.com/Stratus3D/eflambe) for being the original capture engine used by Flame On and the inspiration for the current capture engine.
 
 ## Authors ##
 

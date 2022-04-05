@@ -1,5 +1,8 @@
 # Changelog
 
+## Next
+
+* Rewrite underlying tracing/capture engine
 ## 0.4.0
 
 * Allow targeting a node to run on, and honor dashboard node switcher
