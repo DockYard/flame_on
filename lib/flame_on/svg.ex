@@ -31,7 +31,7 @@ defmodule FlameOn.SVG do
       }
     </style>
       <%= for block <- @blocks do %>
-        <%= render_flame_on_block(%{block: block, block_height: @block_height, duration_ratio: @duration_ratio, top_block: @top_block, parent: @parent, socket: @socket}) %>
+        <%= render_flame_on_block(%{block: block, block_height: @block_height, duration_ratio: @duration_ratio, top_block: @top_block, parent: @parent}) %>
       <% end %>
     </svg>
     """
