@@ -12,8 +12,10 @@ defmodule FlameOn.Capture.MockFunction do
     already_started?
   end
 
-  for n <- 0..26 do
-    args = Enum.take(~w(a b c d e f g h i j k l m n o p q r s t u v w x y z)a, n)
+  arg_names = Enum.map(1..254, &:"arg#{&1}")
+
+  for n <- 0..254 do
+    args = Enum.take(arg_names, n)
 
     def generate(_module, _function, unquote(n)) do
       pid = self()
