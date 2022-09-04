@@ -4,6 +4,7 @@ defmodule FlameOn.Component do
 
   import Ecto.Changeset
   import FlameOn.ErrorHelpers
+  import FlameOn.Format
 
   alias FlameOn.Capture.Block
   alias FlameOn.Capture.Config
