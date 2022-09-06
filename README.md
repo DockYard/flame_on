@@ -7,6 +7,7 @@ Add Flame Graphs to your Phoenix Application or LiveDashboard
 ## Getting Started
 
 For more information on flame graphs and an introduction to Flame On, see [the announcement blog post](https://dockyard.com/blog/2022/02/22/profiling-elixir-applications-with-flame-graphs-and-flame-on)
+
 ## Installation
 
 Add `:flame_on` to your dependencies:
@@ -14,7 +15,7 @@ Add `:flame_on` to your dependencies:
 ```elixir
 def deps do
   [
-    {:flame_on, "~> 0.5.0"}
+    {:flame_on, "~> 0.5.1"}
   ]
 end
 ```
@@ -71,24 +72,24 @@ You may also need to explicitly include `:meck` as a dependency if it can't find
 
 Credit to [eFlambe](https://github.com/Stratus3D/eflambe) for being the original capture engine used by Flame On and the inspiration for the current capture engine.
 
-## Authors ##
+## Authors
 
-* [Mike Binns](https://github.com/TheFirstAvenger)
+-   [Mike Binns](https://github.com/TheFirstAvenger)
 
 [We are very thankful for the many contributors](https://github.com/DockYard/flame_on/graphs/contributors)
 
-## Versioning ##
+## Versioning
 
 This library follows [Semantic Versioning](https://semver.org)
 
-## Looking for help with your Elixir project? ##
+## Looking for help with your Elixir project?
 
 [At DockYard we are ready to help you build your next Elixir project](https://dockyard.com/phoenix-consulting). We have a unique expertise
 in Elixir and Phoenix development that is unmatched. [Get in touch!](https://dockyard.com/contact/hire-us)
 
 At DockYard we love Elixir! You can [read our Elixir blog posts](https://dockyard.com/blog/categories/elixir)
 
-## Legal ##
+## Legal
 
 [DockYard](https://dockyard.com/), Inc. © 2022
 
