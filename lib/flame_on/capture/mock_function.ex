@@ -12,58 +12,20 @@ defmodule FlameOn.Capture.MockFunction do
     already_started?
   end
 
-  def generate(_module, _function, 0) do
-    pid = self()
+  arg_names = Enum.map(1..254, &:"arg#{&1}")
 
-    fn ->
-      already_started? = start_if_not_started(pid)
-      result = :meck.passthrough([])
-      if !already_started?, do: Trace.stop_trace()
-      result
-    end
-  end
+  for n <- 0..254 do
+    args = Enum.take(arg_names, n)
 
-  def generate(_module, _function, 1) do
-    pid = self()
+    def generate(_module, _function, unquote(n)) do
+      pid = self()
 
-    fn a ->
-      already_started? = start_if_not_started(pid)
-      result = :meck.passthrough([a])
-      if !already_started?, do: Trace.stop_trace()
-      result
-    end
-  end
-
-  def generate(_module, _function, 2) do
-    pid = self()
-
-    fn a, b ->
-      already_started? = start_if_not_started(pid)
-      result = :meck.passthrough([a, b])
-      if !already_started?, do: Trace.stop_trace()
-      result
-    end
-  end
-
-  def generate(_module, _function, 3) do
-    pid = self()
-
-    fn a, b, c ->
-      already_started? = start_if_not_started(pid)
-      result = :meck.passthrough([a, b, c])
-      if !already_started?, do: Trace.stop_trace()
-      result
-    end
-  end
-
-  def generate(_module, _function, 4) do
-    pid = self()
-
-    fn a, b, c, d ->
-      already_started? = start_if_not_started(pid)
-      result = :meck.passthrough([a, b, c, d])
-      if !already_started?, do: Trace.stop_trace()
-      result
+      fn unquote_splicing(Enum.map(args, &Macro.var(&1, __MODULE__))) ->
+        already_started? = start_if_not_started(pid)
+        result = :meck.passthrough(unquote(Enum.map(args, &Macro.var(&1, __MODULE__))))
+        if !already_started?, do: Trace.stop_trace()
+        result
+      end
     end
   end
 end
