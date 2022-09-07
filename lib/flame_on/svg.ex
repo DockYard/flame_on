@@ -32,7 +32,12 @@ defmodule FlameOn.SVG do
         </style>
 
         <%= for block <- flattened_blocks(@root_block) do %>
-          <%= render_flame_on_block(%{block: block, block_height: @block_height, top_block: @root_block, parent: @parent}) %>
+          <.flame_on_block
+            block={block}
+            block_height={@block_height}
+            top_block={@root_block}
+            parent={@parent}
+          />
         <% end %>
       </svg>
     </div>
@@ -69,14 +74,12 @@ defmodule FlameOn.SVG do
     [block | Enum.map(children, &flatten/1)]
   end
 
-  defp render_flame_on_block(%{block: %Block{function: nil}}), do: ""
+  defp flame_on_block(%{block: %Block{function: nil}} = assigns), do: ~H""
 
-  defp render_flame_on_block(assigns) do
-    color = color_for_function(assigns.block.function)
-
+  defp flame_on_block(assigns) do
     ~H"""
     <svg width={pct(@block.duration, @top_block.duration)} height={@block_height} x={pct(@block.absolute_start - @top_block.absolute_start, @top_block.duration)} y={(@block.level - @top_block.level) * @block_height} phx-click="view_block" phx-target={@parent} phx-value-id={@block.id}>
-      <rect width="100%" height="100%" style={"fill: #{color};"}></rect>
+      <rect width="100%" height="100%" style={"fill: #{color_for_function(@block.function)};"}></rect>
       <text x={@block_height/4} y={@block_height * 0.5}><%= mfa_to_string(@block.function) %></text>
       <title><%= format_integer(@block.duration) %>&micro;s (<%= trunc((@block.duration * 100) / @top_block.duration) %>%) <%= mfa_to_string(@block.function) %></title>
     </svg>
