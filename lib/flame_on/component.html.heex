@@ -1,4 +1,10 @@
 <div style="display: flex; flex-direction: column; align-items: center;">
+  <script>
+    window.addEventListener('phx:flame-on-svg', function(event) {
+      // This element is in FlameOn.SVG
+      document.getElementById('flame-on-svg-root').innerHTML = event.detail.svg;
+    });
+  </script>
   <style>
     .flame-on-form {
       display: grid;

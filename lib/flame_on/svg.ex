@@ -10,6 +10,36 @@ defmodule FlameOn.SVG do
     {:ok, socket}
   end
 
+  def update(assigns, socket) do
+    socket = assign(socket, assigns)
+
+    # For improved performance, the root <svg> tag has phx-update="ignore", so use JS hooks
+    # to push content updates to it.
+    socket =
+      if changed?(socket, :root_block) do
+        push_event(socket, "flame-on-svg", %{svg: render_blocks_to_string(socket.assigns)})
+      else
+        socket
+      end
+
+    {:ok, socket}
+  end
+
+  defp render_blocks_to_string(assigns) do
+    ~H"""
+    <%= for block <- flattened_blocks(@root_block) do %>
+      <.flame_on_block
+        block={block}
+        block_height={@block_height}
+        top_block={@root_block}
+        parent={@parent}
+      />
+    <% end %>
+    """
+    |> Phoenix.HTML.Safe.to_iodata()
+    |> IO.iodata_to_binary()
+  end
+
   def render(assigns) do
     ~H"""
     <div style={"overflow: hidden; position: relative; width: 1276px; height: #{@block_height * @root_block.max_child_level}px"}>
@@ -31,14 +61,8 @@ defmodule FlameOn.SVG do
           }
         </style>
 
-        <%= for block <- flattened_blocks(@root_block) do %>
-          <.flame_on_block
-            block={block}
-            block_height={@block_height}
-            top_block={@root_block}
-            parent={@parent}
-          />
-        <% end %>
+        <% # Updated via push_event and a JS hook %>
+        <svg id="flame-on-svg-root" phx-update="ignore" />
       </svg>
     </div>
     """
