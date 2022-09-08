@@ -13,7 +13,7 @@ defmodule FlameOn.SVG do
       |> assign(:top_block, top_block)
 
     ~H"""
-    <svg width="1276" height={@block_height * top_block.max_child_level} style="background-color: white;">
+    <svg width="1276" height={@block_height * @top_block.max_child_level} style="background-color: white;">
     <style>
       svg > svg {
         cursor: pointer;
