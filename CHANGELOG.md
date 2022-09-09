@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.2
+
+-   Improve performance by not rendering blocks smaller than 0.1% of the top block width (Thanks @schrockwell)
+
 ## 0.5.1
 
 -   Support tracing functions with greater than 4 arity (Thanks @schrockwell)

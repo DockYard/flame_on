@@ -4,7 +4,7 @@ defmodule FlameOn.MixProject do
   def project do
     [
       app: :flame_on,
-      version: "0.5.1",
+      version: "0.5.2",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
