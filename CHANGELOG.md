@@ -1,5 +1,9 @@
 # Changelog
 
+## Next
+
+-   Upgrade LiveView to v0.18
+
 ## 0.5.2
 
 -   Improve performance by not rendering blocks smaller than 0.1% of the top block width (Thanks @schrockwell)
