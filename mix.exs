@@ -5,11 +5,17 @@ defmodule FlameOn.MixProject do
     [
       app: :flame_on,
       version: "0.5.2",
-      elixir: "~> 1.13",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
+      dialyzer: [
+        ignore_warnings: ".dialyzer_ignore.exs",
+        list_unused_filters: true,
+        plt_file: {:no_warn, "plts/flame_on.plt"},
+        plt_add_apps: [:ex_unit, :mix]
+      ],
       docs: docs(),
       package: package(),
       source_url: "https://github.com/DockYard/flame_on"
@@ -48,11 +54,12 @@ defmodule FlameOn.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:dialyxir, "~> 1.2.0", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.28.0", only: :dev, runtime: false},
       {:ecto, "~> 3.7"},
       {:meck, "~> 0.9.2"},
-      {:gettext, "~> 0.19"},
+      {:gettext, "~> 0.21.0"},
       {:jason, "~> 1.0"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_live_dashboard, "~> 0.6.4"},

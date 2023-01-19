@@ -26,3 +26,5 @@ flame_on-*.tar
 /tmp/
 
 .DS_Store
+
+/plts/

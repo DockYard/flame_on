@@ -1,0 +1,82 @@
+name: Elixir CI
+
+on:
+  pull_request:
+    branches: [main]
+env:
+  MIX_ENV: test
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    strategy:
+      matrix:
+        otp: ['25.1.2']
+        elixir: ['1.14.2']
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: Retrieve Mix Dependencies Cache
+        uses: actions/cache@v3
+        id: mix-deps-cache
+        with:
+          path: deps
+          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps-${{ github.event.pull_request.base.sha }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: |
+            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps-${{ github.event.pull_request.base.sha }}-
+            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps
+
+      - name: Retrieve Mix Build Cache
+        uses: actions/cache@v3
+        id: mix-build-cache
+        with:
+          path: _build/test/lib
+          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-build-${{ github.event.pull_request.base.sha }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: |
+            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-build-${{ github.event.pull_request.base.sha }}-
+            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-build-
+
+      - name: Install Mix Dependencies
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: Check Formatting
+        run: |
+          mix format --check-formatted
+
+      - name: Clean
+        run: mix clean
+
+      - name: Compile
+        run: mix compile --warnings-as-errors
+
+      # - name: Run Credo
+        # run: mix credo --strict
+
+      - name: Run Tests
+        id: tests
+        # run: mix coveralls.github 
+        run: mix test
+
+      - name: Retrieve PLT Cache
+        uses: actions/cache@v3
+        id: plt-cache
+        with:
+          path: plts
+          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plts-${{ github.event.pull_request.base.sha }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: |
+            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plts-${{ github.event.pull_request.base.sha }}-
+            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plts-
+
+      - name: Run dialyzer
+        run: mix dialyzer
