@@ -35,7 +35,7 @@ defmodule FlameOn.Component do
         socket
         |> assign(:capturing?, false)
         |> assign(:root_block, nil)
-        |> assign(:capture_changeset, CaptureSchema.changeset())
+        |> assign(:capture_changeset, CaptureSchema.changeset(Node.self()))
         |> assign(:viewing_block, nil)
         |> assign(:view_block_path, [])
         |> assign(:capture_timed_out?, false)
@@ -49,7 +49,7 @@ defmodule FlameOn.Component do
   end
 
   def handle_event("capture_schema", %{"capture_schema" => attrs}, socket) do
-    changeset = CaptureSchema.changeset(attrs)
+    changeset = CaptureSchema.changeset(socket.assigns.target_node, attrs)
 
     {socket, changeset} =
       if changeset.valid? do
@@ -82,8 +82,8 @@ defmodule FlameOn.Component do
 
   def handle_event("validate", %{"capture_schema" => attrs}, socket) do
     changeset =
-      attrs
-      |> CaptureSchema.changeset()
+      socket.assigns.target_node
+      |> CaptureSchema.changeset(attrs)
       |> Map.put(:action, :insert)
 
     {:noreply, assign(socket, :capture_changeset, changeset)}
