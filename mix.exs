@@ -62,8 +62,8 @@ defmodule FlameOn.MixProject do
       {:gettext, "~> 0.21.0"},
       {:jason, "~> 1.0"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_dashboard, "~> 0.6.4"},
-      {:phoenix_live_view, "~> 0.17.6"}
+      {:phoenix_live_dashboard, "~> 0.7.2"},
+      {:phoenix_live_view, "~> 0.18.11"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
