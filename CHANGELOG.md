@@ -2,6 +2,7 @@
 
 ## Next
 
+-   Run module/function validations on selected node (thanks @schrockwell)
 -   Upgrade LiveView to v0.18
 
 ## 0.5.2

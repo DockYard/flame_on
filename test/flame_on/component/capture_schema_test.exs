@@ -17,20 +17,21 @@ defmodule FlameOn.Component.CaptureSchemaTest do
       timeout: 15_000
     }
     test "valid module passes" do
-      assert %Changeset{valid?: true} = CaptureSchema.changeset(@valid_attrs)
+      assert %Changeset{valid?: true} = CaptureSchema.changeset(Node.self(), @valid_attrs)
     end
 
     test "valid module without `Elixir.` fails" do
       attrs = %{@valid_attrs | module: "FlameOnTest.ExampleModule"}
 
       assert %Changeset{valid?: false, errors: [module: {"Elixir modules must start with \"Elixir.\"", []}]} =
-               CaptureSchema.changeset(attrs)
+               CaptureSchema.changeset(Node.self(), attrs)
     end
 
     test "invalid module fails" do
       attrs = %{@valid_attrs | module: "Elixir.FlameOnTest.IncorrectExampleModule"}
 
-      assert %Changeset{valid?: false, errors: [module: {"Module does not exist", []}]} = CaptureSchema.changeset(attrs)
+      assert %Changeset{valid?: false, errors: [module: {"Module does not exist", []}]} =
+               CaptureSchema.changeset(Node.self(), attrs)
     end
 
     test "invalid function fails" do
@@ -39,7 +40,7 @@ defmodule FlameOn.Component.CaptureSchemaTest do
       assert %Changeset{
                valid?: false,
                errors: [function: {"No foobar/0 function on Elixir.FlameOnTest.ExampleModule", []}]
-             } = CaptureSchema.changeset(attrs)
+             } = CaptureSchema.changeset(Node.self(), attrs)
     end
 
     test "old code function passes" do
@@ -48,7 +49,7 @@ defmodule FlameOn.Component.CaptureSchemaTest do
 
       true = :erlang.check_old_code(FlameOnTest.ExampleModule)
 
-      assert %Changeset{valid?: true} = CaptureSchema.changeset(@valid_attrs)
+      assert %Changeset{valid?: true} = CaptureSchema.changeset(Node.self(), @valid_attrs)
     end
   end
 
@@ -60,13 +61,14 @@ defmodule FlameOn.Component.CaptureSchemaTest do
       timeout: 15_000
     }
     test "valid module passes" do
-      assert %Changeset{valid?: true} = CaptureSchema.changeset(@valid_attrs)
+      assert %Changeset{valid?: true} = CaptureSchema.changeset(Node.self(), @valid_attrs)
     end
 
     test "invalid module fails" do
       attrs = %{@valid_attrs | module: "no_code"}
 
-      assert %Changeset{valid?: false, errors: [module: {"Module does not exist", []}]} = CaptureSchema.changeset(attrs)
+      assert %Changeset{valid?: false, errors: [module: {"Module does not exist", []}]} =
+               CaptureSchema.changeset(Node.self(), attrs)
     end
 
     test "invalid function fails" do
@@ -75,7 +77,7 @@ defmodule FlameOn.Component.CaptureSchemaTest do
       assert %Changeset{
                valid?: false,
                errors: [function: {"No foobar/0 function on code", []}]
-             } = CaptureSchema.changeset(attrs)
+             } = CaptureSchema.changeset(Node.self(), attrs)
     end
   end
 end
