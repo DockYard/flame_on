@@ -54,6 +54,7 @@ defmodule FlameOn.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ets, "~> 0.9.0"},
       {:dialyxir, "~> 1.2.0", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.28.0", only: :dev, runtime: false},
