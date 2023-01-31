@@ -23,7 +23,10 @@ defmodule FlameOn.Capture.Server do
   singleton to track that it has started for a given capture
   """
   def trace_started? do
-    GenServer.call(__MODULE__, :trace_started?)
+    set = ETS.Set.wrap_existing!(__MODULE__)
+    {:started?, started?} = ETS.Set.get!(set, :started?, {:started?, false})
+    if !started?, do: ETS.Set.put!(set, {:started?, true})
+    started?
   end
 
   def stop_trace do
@@ -31,6 +34,7 @@ defmodule FlameOn.Capture.Server do
   end
 
   def init(%Config{} = config) do
+    ETS.Set.new!(name: __MODULE__, protection: :public)
     mock_function(config)
     starter_block = %Block{id: "starter", function: {config.module, config.function, config.arity}, absolute_start: 0}
     Process.send_after(self(), :timeout, config.timeout)
@@ -72,10 +76,6 @@ defmodule FlameOn.Capture.Server do
     send_timeout(state.config)
 
     {:stop, :normal, state}
-  end
-
-  def handle_call(:trace_started?, _, %State{trace_started?: started?} = state) do
-    {:reply, started?, %State{state | trace_started?: true}}
   end
 
   def handle_cast(:stop_trace, %State{} = state) do
