@@ -11,7 +11,7 @@ defmodule FlameOn.Component.CaptureSchemaTest do
 
   describe "Elixir module" do
     @valid_attrs %{
-      module: "Elixir.FlameOnTest.ExampleModule",
+      module: "FlameOnTest.ExampleModule",
       function: "foo",
       arity: 0,
       timeout: 15_000
@@ -20,17 +20,15 @@ defmodule FlameOn.Component.CaptureSchemaTest do
       assert %Changeset{valid?: true} = CaptureSchema.changeset(Node.self(), @valid_attrs)
     end
 
-    test "valid module without `Elixir.` fails" do
-      attrs = %{@valid_attrs | module: "FlameOnTest.ExampleModule"}
-
-      assert %Changeset{valid?: false, errors: [module: {"Elixir modules must start with \"Elixir.\"", []}]} =
-               CaptureSchema.changeset(Node.self(), attrs)
+    test "valid module starting with 'Elixir.' passes" do
+      attrs = %{@valid_attrs | module: "Elixir." <> @valid_attrs.module}
+      assert %Changeset{valid?: true} = CaptureSchema.changeset(Node.self(), attrs)
     end
 
     test "invalid module fails" do
-      attrs = %{@valid_attrs | module: "Elixir.FlameOnTest.IncorrectExampleModule"}
+      attrs = %{@valid_attrs | module: "FlameOnTest.IncorrectExampleModule"}
 
-      assert %Changeset{valid?: false, errors: [module: {"Module does not exist", []}]} =
+      assert %Changeset{valid?: false, errors: [module: {"Module not found", []}]} =
                CaptureSchema.changeset(Node.self(), attrs)
     end
 
@@ -67,7 +65,7 @@ defmodule FlameOn.Component.CaptureSchemaTest do
     test "invalid module fails" do
       attrs = %{@valid_attrs | module: "no_code"}
 
-      assert %Changeset{valid?: false, errors: [module: {"Module does not exist", []}]} =
+      assert %Changeset{valid?: false, errors: [module: {"Module not found", []}]} =
                CaptureSchema.changeset(Node.self(), attrs)
     end
 

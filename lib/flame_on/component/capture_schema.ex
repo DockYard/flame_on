@@ -23,32 +23,52 @@ defmodule FlameOn.Component.CaptureSchema do
   defp validate_module(%Changeset{valid?: false} = changeset, _node), do: changeset
 
   defp validate_module(changeset, node) do
-    module_str = get_field(changeset, :module)
+    module =
+      changeset
+      |> get_field(:module)
+      |> maybe_prepend_elixir()
+      |> rpc_to_existing_atom(node)
 
-    module = rpc_to_existing_atom(node, module_str)
-
-    if is_nil(module) or
-         not (rpc_function_exported?(node, module, :__info__, 1) or
-                rpc_check_old_code(node, module) or
-                rpc_module_loaded(node, module)) do
-      if String.contains?(module_str, ".") and !String.starts_with?(module_str, "Elixir.") do
-        add_error(changeset, :module, "Elixir modules must start with \"Elixir.\"")
-      else
-        add_error(changeset, :module, "Module does not exist")
-      end
+    if is_nil(module) or !found_module(node, module) do
+      add_error(changeset, :module, "Module not found")
     else
       changeset
+    end
+  end
+
+  defp found_module(node, module) do
+    rpc_function_exported?(node, module, :__info__, 1) or
+      rpc_check_old_code(node, module) or
+      rpc_module_loaded(node, module)
+  end
+
+  @doc """
+  Since we support both Elixir and Erlang modules, and are taking a string argument, modules have to be
+  converted to the Erlang notation before being passed to various checks and to :meck. This means an Elixir module like
+  Phoenix.LiveView would have to be converted to the atom :"Elixir.Phoenix.LiveView", but cowboy_handler remains
+  :cowboy_handler. If they already prepended `Elixir.` then we pass the module as is.
+  """
+  def maybe_prepend_elixir(""), do: ""
+  def maybe_prepend_elixir("Elixir." <> _ = module_str), do: module_str
+
+  def maybe_prepend_elixir(module_str) do
+    first = String.at(module_str, 0)
+
+    if String.upcase(first) == first do
+      "Elixir." <> module_str
+    else
+      module_str
     end
   end
 
   defp validate_function_arity(%Changeset{valid?: false} = changeset, _node), do: changeset
 
   defp validate_function_arity(changeset, node) do
-    module = changeset |> get_field(:module) |> String.to_existing_atom()
+    module = changeset |> get_field(:module) |> maybe_prepend_elixir() |> String.to_existing_atom()
     function_str = get_field(changeset, :function)
     arity = get_field(changeset, :arity)
 
-    function = rpc_to_existing_atom(node, function_str)
+    function = rpc_to_existing_atom(function_str, node)
 
     if !is_nil(function) and rpc_check_old_code(node, module) do
       Code.ensure_loaded(module)
@@ -61,7 +81,7 @@ defmodule FlameOn.Component.CaptureSchema do
     end
   end
 
-  defp rpc_to_existing_atom(node, string) do
+  defp rpc_to_existing_atom(string, node) do
     case :rpc.call(node, String, :to_existing_atom, [string]) do
       atom when is_atom(atom) -> atom
       {:badrpc, {:EXIT, {:badarg, _}}} -> nil
