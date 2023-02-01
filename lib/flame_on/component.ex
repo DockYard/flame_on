@@ -55,7 +55,9 @@ defmodule FlameOn.Component do
       if changeset.valid? do
         config =
           Config.new(
-            Ecto.Changeset.fetch_field!(changeset, :module) |> String.to_existing_atom(),
+            Ecto.Changeset.fetch_field!(changeset, :module)
+            |> CaptureSchema.maybe_prepend_elixir()
+            |> String.to_existing_atom(),
             Ecto.Changeset.fetch_field!(changeset, :function) |> String.to_existing_atom(),
             Ecto.Changeset.fetch_field!(changeset, :arity),
             Ecto.Changeset.fetch_field!(changeset, :timeout),
