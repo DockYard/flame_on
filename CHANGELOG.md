@@ -2,6 +2,7 @@
 
 ## Next
 
+-   Rework module form validation to be more reliable
 -   Don't require `Elixir.` prefix on Elixir modules
 -   Rework trace_started? to not rely on Trace GenServer
 -   Run module/function validations on selected node (thanks @schrockwell)

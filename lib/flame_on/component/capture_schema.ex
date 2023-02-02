@@ -29,17 +29,11 @@ defmodule FlameOn.Component.CaptureSchema do
       |> maybe_prepend_elixir()
       |> rpc_to_existing_atom(node)
 
-    if is_nil(module) or !found_module(node, module) do
+    if is_nil(module) or !rpc_code_ensure_loaded?(module, node) do
       add_error(changeset, :module, "Module not found")
     else
       changeset
     end
-  end
-
-  defp found_module(node, module) do
-    rpc_function_exported?(node, module, :__info__, 1) or
-      rpc_check_old_code(node, module) or
-      rpc_module_loaded(node, module)
   end
 
   @doc """
@@ -65,16 +59,13 @@ defmodule FlameOn.Component.CaptureSchema do
 
   defp validate_function_arity(changeset, node) do
     module = changeset |> get_field(:module) |> maybe_prepend_elixir() |> String.to_existing_atom()
+
     function_str = get_field(changeset, :function)
     arity = get_field(changeset, :arity)
 
     function = rpc_to_existing_atom(function_str, node)
 
-    if !is_nil(function) and rpc_check_old_code(node, module) do
-      Code.ensure_loaded(module)
-    end
-
-    if is_nil(function) or not rpc_function_exported?(node, module, function, arity) do
+    if is_nil(function) or not rpc_function_exported?(module, function, arity, node) do
       add_error(changeset, :function, "No #{function_str}/#{arity} function on #{module}")
     else
       changeset
@@ -88,15 +79,11 @@ defmodule FlameOn.Component.CaptureSchema do
     end
   end
 
-  defp rpc_function_exported?(node, module, function, arity) do
+  defp rpc_code_ensure_loaded?(module, node) do
+    :rpc.call(node, Code, :ensure_loaded?, [module])
+  end
+
+  defp rpc_function_exported?(module, function, arity, node) do
     :rpc.call(node, Kernel, :function_exported?, [module, function, arity])
-  end
-
-  defp rpc_check_old_code(node, module) do
-    :rpc.call(node, :erlang, :check_old_code, [module])
-  end
-
-  defp rpc_module_loaded(node, module) do
-    :rpc.call(node, :erlang, :module_loaded, [module])
   end
 end
