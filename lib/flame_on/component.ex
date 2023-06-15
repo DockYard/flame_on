@@ -65,7 +65,7 @@ defmodule FlameOn.Component do
             {:live_component, self(), socket.assigns.id}
           )
 
-        FlameOn.Capture.capture(config)
+        :ok = FlameOn.Capture.capture(config)
 
         socket =
           socket

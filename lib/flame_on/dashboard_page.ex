@@ -9,7 +9,9 @@ defmodule FlameOn.DashboardPage do
   end
 
   @impl PageBuilder
-  def render_page(%{page: %{node: node}}) do
-    {FlameOn.Component, %{id: :flame_on_component, node: node}}
+  def render(assigns) do
+    ~H"""
+    <.live_component module={FlameOn.Component} id="flame_on_component" node={@page.node}></.live_component>
+    """
   end
 end

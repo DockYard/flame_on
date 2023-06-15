@@ -54,7 +54,6 @@ defmodule FlameOn.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ets, "~> 0.9.0"},
       {:dialyxir, "~> 1.2.0", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.28.0", only: :dev, runtime: false},
@@ -63,10 +62,8 @@ defmodule FlameOn.MixProject do
       {:gettext, "~> 0.21"},
       {:jason, "~> 1.0"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_dashboard, "~> 0.7.2"},
-      {:phoenix_live_view, "~> 0.18.11"}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:phoenix_live_dashboard, "~> 0.8"},
+      {:phoenix_live_view, "~> 0.19"}
     ]
   end
 end
