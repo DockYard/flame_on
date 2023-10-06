@@ -15,7 +15,7 @@ Add `:flame_on` to your dependencies:
 ```elixir
 def deps do
   [
-    {:flame_on, "~> 0.5.2"}
+    {:flame_on, "~> 0.6.0"}
   ]
 end
 ```
@@ -74,7 +74,7 @@ Credit to [eFlambe](https://github.com/Stratus3D/eflambe) for being the original
 
 ## Authors
 
--   [Mike Binns](https://github.com/TheFirstAvenger)
+- [Mike Binns](https://github.com/TheFirstAvenger)
 
 [We are very thankful for the many contributors](https://github.com/DockYard/flame_on/graphs/contributors)
 
