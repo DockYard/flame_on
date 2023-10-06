@@ -2,6 +2,10 @@
 
 ## Next
 
+-   Upgrade Dialyxir
+-   Upgrade Build/CI targets to Elixir 1.15 & OTP 26
+-   Upgrade LiveDashboard to v0.8.2
+-   Upgrade LiveView to v0.20
 -   Rework module form validation to be more reliable
 -   Don't require `Elixir.` prefix on Elixir modules
 -   Rework trace_started? to not rely on Trace GenServer

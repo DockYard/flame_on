@@ -13,8 +13,8 @@ jobs:
     name: Test
     strategy:
       matrix:
-        otp: ['25.1.2']
-        elixir: ['1.14.2']
+        otp: ["26.1.1"]
+        elixir: ["1.15.6"]
     steps:
       - uses: actions/checkout@v2
 
@@ -61,11 +61,11 @@ jobs:
         run: mix compile --warnings-as-errors
 
       # - name: Run Credo
-        # run: mix credo --strict
+      # run: mix credo --strict
 
       - name: Run Tests
         id: tests
-        # run: mix coveralls.github 
+        # run: mix coveralls.github
         run: mix test
 
       - name: Retrieve PLT Cache
