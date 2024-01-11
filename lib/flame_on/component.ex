@@ -1,6 +1,6 @@
 defmodule FlameOn.Component do
   use Phoenix.LiveComponent
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
 
   import FlameOn.ErrorHelpers
 
