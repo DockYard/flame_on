@@ -63,9 +63,7 @@ defmodule FlameOn.SVG do
         <rect width="100%" height="100%" style={"fill: #{color_for_function(@block.function)};"}></rect>
         <text x={@block_height / 4} y={@block_height * 0.5}><%= mfa_to_string(@block.function) %></text>
         <title>
-          <%= format_integer(@block.duration) %>&micro;s (<%= trunc(@block.duration * 100 / @top_block.duration) %>%) <%= mfa_to_string(
-            @block.function
-          ) %>
+          <%= format_integer(@block.duration) %>&micro;s (<%= trunc(@block.duration * 100 / @top_block.duration) %>%) <%= mfa_to_string(@block.function) %>
         </title>
       </svg>
     <% end %>

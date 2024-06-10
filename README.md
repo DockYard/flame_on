@@ -44,7 +44,7 @@ You will now find a `Flame On` tab along the top of the LiveDashboard page
 
 ## Usage
 
-Choose the Module, Function, and Arity of the function you want to profile, click "Flame On", and then trigger the function (e.g. make a web request in a new tab). Note that for Elixir modules, you will need to prefix them with `Elixir`, e.g. `Elixir.Phoenix.Controller`, while Erlang modules take simply the erlang module name, e.g. `cowboy_handler`. The default values of `cowboy_handler`/`execute`/`2` are the best way to capture a standard Phoenix Controller DeadView request or the DeadView request that kicks off a LiveView request.
+Choose the Module, Function, and Arity of the function you want to profile, click "Flame On", and then trigger the function (e.g. make a web request in a new tab). Note that for Elixir modules, you will need to prefix them with `Elixir`, e.g. `Elixir.Phoenix.Controller`, while Erlang modules take simply the erlang module name, e.g. `cowboy_handler`. The default values of `Bandit.Pipeline`/`run`/`4` (for newer Phoenix apps) and `cowboy_handler`/`execute`/`2` (for older Phoenix apps) are the best way to capture a standard Phoenix Controller DeadView request or the DeadView request that kicks off a LiveView request.
 
 ### Zooming
 
