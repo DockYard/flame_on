@@ -23,10 +23,18 @@ defmodule FlameOn.Capture.Server do
   singleton to track that it has started for a given capture
   """
   def trace_started? do
-    set = ETS.Set.wrap_existing!(__MODULE__)
-    {:started?, started?} = ETS.Set.get!(set, :started?, {:started?, false})
-    if !started?, do: ETS.Set.put!(set, {:started?, true})
-    started?
+    case ETS.Set.wrap_existing!(__MODULE__) do
+      {:ok, set} ->
+        {:started?, started?} = ETS.Set.get!(set, :started?, {:started?, false})
+        if !started?, do: ETS.Set.put!(set, {:started?, true})
+        started?
+
+      # in high traffic instances, the table may have just shut down from a previous run when this is run
+      # In this case, we don't want to start a new trace, so we return true to skip starting/stopping a new trace
+      # https://github.com/DockYard/flame_on/issues/41
+      {:error, :table_not_found} ->
+        true
+    end
   end
 
   def stop_trace do
