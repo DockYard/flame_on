@@ -3,7 +3,9 @@ defmodule FlameOn.ErrorHelpers do
   Conveniences for translating and building error messages.
   """
 
-  use Phoenix.HTML
+  # For Phoenix HTML 4 vs 3
+  import Phoenix.HTML.Form
+  use PhoenixHTMLHelpers
 
   @doc """
   Generates tag for inlined form input errors.

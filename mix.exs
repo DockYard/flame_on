@@ -62,11 +62,11 @@ defmodule FlameOn.MixProject do
       {:meck, "~> 0.9.2"},
       {:gettext, "~> 0.21"},
       {:jason, "~> 1.0"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_live_dashboard, "~> 0.8.2"},
-      {:phoenix_live_view, "~> 0.20.0"}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:phoenix_ecto, "~> 4.6.1"},
+      {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:phoenix_live_view, "~> 0.20.14"},
+      {:phoenix_html, "~> 4.0"},
+      {:phoenix_html_helpers, "~> 1.0.1"}
     ]
   end
 end

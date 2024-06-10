@@ -111,14 +111,7 @@
       cursor: not-allowed;
     }
   </style>
-  <.form
-    :let={f}
-    for={@capture_changeset}
-    phx-submit="capture_schema"
-    phx-change="validate"
-    phx-target={@myself}
-    class="flame-on-form"
-  >
+  <.form :let={f} for={@capture_changeset} phx-submit="capture_schema" phx-change="validate" phx-target={@myself} class="flame-on-form">
     <%= label(f, :module, class: "label1") %>
     <%= text_input(f, :module, class: "input1", disabled: @capturing?) %>
     <%= error_tag(f, :module, "fo-error error1") %>
@@ -148,13 +141,7 @@
   <%= if not is_nil(@viewing_block) do %>
     <%= if @view_block_path do %>
       <%= for %Block{} = block <- @view_block_path do %>
-        <a
-          href="#"
-          phx-click="view_block"
-          phx-target={@myself}
-          phx-value-id={block.id}
-          style="font-size: 12.5px; font-family: monospace"
-        >
+        <a href="#" phx-click="view_block" phx-target={@myself} phx-value-id={block.id} style="font-size: 12.5px; font-family: monospace">
           <%= FlameOn.SVG.mfa_to_string(block.function) %>
         </a>
       <% end %>

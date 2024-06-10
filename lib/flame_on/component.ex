@@ -1,8 +1,9 @@
 defmodule FlameOn.Component do
   use Phoenix.LiveComponent
-  use Phoenix.HTML
 
   import FlameOn.ErrorHelpers
+
+  use PhoenixHTMLHelpers
 
   alias FlameOn.Capture.Block
   alias FlameOn.Capture.Config
@@ -30,17 +31,20 @@ defmodule FlameOn.Component do
   end
 
   def update(assigns, socket) do
+    target_node = Map.get(assigns, :node, Node.self())
+    capture_changeset = Map.put(CaptureSchema.changeset(target_node), :action, :validate)
+
     socket =
       if !Map.has_key?(socket.assigns, :id) do
         socket
         |> assign(:capturing?, false)
         |> assign(:root_block, nil)
-        |> assign(:capture_changeset, CaptureSchema.changeset(Node.self()))
+        |> assign(:capture_changeset, capture_changeset)
         |> assign(:viewing_block, nil)
         |> assign(:view_block_path, [])
         |> assign(:capture_timed_out?, false)
         |> assign(:id, assigns.id)
-        |> assign(:target_node, Map.get(assigns, :node, Node.self()))
+        |> assign(:target_node, target_node)
       else
         socket
       end
@@ -86,7 +90,7 @@ defmodule FlameOn.Component do
     changeset =
       socket.assigns.target_node
       |> CaptureSchema.changeset(attrs)
-      |> Map.put(:action, :insert)
+      |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :capture_changeset, changeset)}
   end
