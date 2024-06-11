@@ -23,7 +23,7 @@ defmodule FlameOn.Capture.Server do
   singleton to track that it has started for a given capture
   """
   def trace_started? do
-    case ETS.Set.wrap_existing!(__MODULE__) do
+    case ETS.Set.wrap_existing(__MODULE__) do
       {:ok, set} ->
         {:started?, started?} = ETS.Set.get!(set, :started?, {:started?, false})
         if !started?, do: ETS.Set.put!(set, {:started?, true})
