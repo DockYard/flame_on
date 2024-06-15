@@ -138,6 +138,10 @@
     Capture Timed Out<br />
   <% end %>
 
+  <%= if @html_render do %>
+    <a href={"data:image/svg+xml;base64," <> Base.encode64(@html_render)} download="flame_on.svg" target="_blank">Download graph as SVG</a>
+  <% end %>
+
   <%= if not is_nil(@viewing_block) do %>
     <%= if @view_block_path do %>
       <%= for %Block{} = block <- @view_block_path do %>
