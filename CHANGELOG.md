@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 0.7.0
 
 - Add "Download graph as SVG" feature
 - `Phoenix.HTML` 4.0
