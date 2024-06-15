@@ -7,6 +7,7 @@
 - Fix issue with changeset form not honoring initial node
 - Elixir 1.16 in CI
 - Increase formatter line length
+- Mitigate race condition in trace_started? function.
 
 ## 0.6.0
 
