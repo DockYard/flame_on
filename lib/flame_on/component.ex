@@ -16,6 +16,7 @@ defmodule FlameOn.Component do
       |> assign(:capture_timed_out?, false)
       |> assign(:root_block, root_block)
       |> assign(:viewing_block, root_block)
+      |> assign(:html_render, nil)
       |> assign(:view_block_path, [])
 
     {:ok, socket}
@@ -28,6 +29,10 @@ defmodule FlameOn.Component do
       |> assign(:capture_timed_out?, true)
 
     {:ok, socket}
+  end
+
+  def update(%{html_render: html}, socket) do
+    {:ok, assign(socket, :html_render, html)}
   end
 
   def update(assigns, socket) do
@@ -45,6 +50,7 @@ defmodule FlameOn.Component do
         |> assign(:capture_timed_out?, false)
         |> assign(:id, assigns.id)
         |> assign(:target_node, target_node)
+        |> assign(:html_render, nil)
       else
         socket
       end

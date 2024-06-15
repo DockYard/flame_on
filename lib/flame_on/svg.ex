@@ -12,36 +12,46 @@ defmodule FlameOn.SVG do
       |> assign(:block_height, 25)
       |> assign(:top_block, top_block)
 
-    ~H"""
-    <svg width="1276" height={@block_height * @top_block.max_child_level} style="background-color: white;">
-      <style>
-        svg > svg {
-          cursor: pointer;
-        }
+    rendered =
+      ~H"""
+      <svg width="1276" height={@block_height * @top_block.max_child_level} style="background-color: white;" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          svg > svg {
+            cursor: pointer;
+          }
 
-        svg > svg > rect {
-          stroke: white;
-          rx: 5px;
-        }
+          svg > svg > rect {
+            stroke: white;
+            rx: 5px;
+          }
 
-        svg > svg > text {
-          font-size: <%= @block_height / 2 %>px;
-          font-family: monospace;
-          dominant-baseline: middle;
-        }
-      </style>
-      <%= for block <- @blocks do %>
-        <%= render_flame_on_block(%{
-          block: block,
-          block_height: @block_height,
-          duration_ratio: @duration_ratio,
-          top_block: @top_block,
-          parent: @parent,
-          socket: @socket
-        }) %>
-      <% end %>
-    </svg>
-    """
+          svg > svg > text {
+            font-size: <%= @block_height / 2 %>px;
+            font-family: monospace;
+            dominant-baseline: middle;
+          }
+        </style>
+        <%= for block <- @blocks do %>
+          <%= render_flame_on_block(%{
+            block: block,
+            block_height: @block_height,
+            duration_ratio: @duration_ratio,
+            top_block: @top_block,
+            parent: @parent,
+            socket: @socket
+          }) %>
+        <% end %>
+      </svg>
+      """
+
+    html =
+      rendered
+      |> Phoenix.HTML.Safe.to_iodata()
+      |> IO.iodata_to_binary()
+
+    send_update(assigns.parent, html_render: html)
+
+    rendered
   end
 
   defp render_flame_on_block(%{block: %Block{function: nil}}), do: ""
@@ -63,7 +73,7 @@ defmodule FlameOn.SVG do
         <rect width="100%" height="100%" style={"fill: #{color_for_function(@block.function)};"}></rect>
         <text x={@block_height / 4} y={@block_height * 0.5}><%= mfa_to_string(@block.function) %></text>
         <title>
-          <%= format_integer(@block.duration) %>&micro;s (<%= trunc(@block.duration * 100 / @top_block.duration) %>%) <%= mfa_to_string(@block.function) %>
+          <%= format_integer(@block.duration) %>&#181;s (<%= trunc(@block.duration * 100 / @top_block.duration) %>%) <%= mfa_to_string(@block.function) %>
         </title>
       </svg>
     <% end %>

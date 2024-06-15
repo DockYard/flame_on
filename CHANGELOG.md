@@ -2,6 +2,7 @@
 
 ## Next
 
+- Add "Download graph as SVG" feature
 - `Phoenix.HTML` 4.0
 - Bandit.Pipeline.run as default MFA when available (it's now the default in `mix phx_new`)
 - Fix issue with changeset form not honoring initial node
