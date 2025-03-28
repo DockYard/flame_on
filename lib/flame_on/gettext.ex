@@ -20,5 +20,5 @@ defmodule FlameOn.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :flame_on
+  use Gettext.Backend, otp_app: :flame_on
 end

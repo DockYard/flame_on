@@ -88,6 +88,15 @@ defmodule FlameOn.Component.CaptureSchema do
     :rpc.call(node, Code, :ensure_loaded?, [module])
   end
 
+  defp rpc_function_exported?(module, function, arity, node) when is_binary(module) and is_binary(function) do
+    {module, function} = {rpc_to_existing_atom(module, node), rpc_to_existing_atom(function, node)}
+    if is_nil(module) || !rpc_code_ensure_loaded?(module, node) || is_nil(function) do
+      false
+    else
+      rpc_function_exported?(module, function, arity, node)
+    end
+  end
+
   defp rpc_function_exported?(module, function, arity, node) do
     :rpc.call(node, Kernel, :function_exported?, [module, function, arity])
   end
