@@ -32,14 +32,14 @@ defmodule FlameOn.SVG do
           }
         </style>
         <%= for block <- @blocks do %>
-          <%= render_flame_on_block(%{
+          {render_flame_on_block(%{
             block: block,
             block_height: @block_height,
             duration_ratio: @duration_ratio,
             top_block: @top_block,
             parent: @parent,
             socket: @socket
-          }) %>
+          })}
         <% end %>
       </svg>
       """
@@ -71,9 +71,9 @@ defmodule FlameOn.SVG do
         phx-value-id={@block.id}
       >
         <rect width="100%" height="100%" style={"fill: #{color_for_function(@block.function)};"}></rect>
-        <text x={@block_height / 4} y={@block_height * 0.5}><%= mfa_to_string(@block.function) %></text>
+        <text x={@block_height / 4} y={@block_height * 0.5}>{mfa_to_string(@block.function)}</text>
         <title>
-          <%= format_integer(@block.duration) %>&#181;s (<%= trunc(@block.duration * 100 / @top_block.duration) %>%) <%= mfa_to_string(@block.function) %>
+          {format_integer(@block.duration)}&#181;s ({trunc(@block.duration * 100 / @top_block.duration)}%) {mfa_to_string(@block.function)}
         </title>
       </svg>
     <% end %>

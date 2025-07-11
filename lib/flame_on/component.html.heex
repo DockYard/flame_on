@@ -112,27 +112,27 @@
     }
   </style>
   <.form :let={f} for={@capture_changeset} phx-submit="capture_schema" phx-change="validate" phx-target={@myself} class="flame-on-form">
-    <%= label(f, :module, class: "label1") %>
-    <%= text_input(f, :module, class: "input1", disabled: @capturing?) %>
-    <%= error_tag(f, :module, "fo-error error1") %>
+    {label(f, :module, class: "label1")}
+    {text_input(f, :module, class: "input1", disabled: @capturing?)}
+    {error_tag(f, :module, "fo-error error1")}
 
-    <%= label(f, :function, class: "label2") %>
-    <%= text_input(f, :function, class: "input2", disabled: @capturing?) %>
-    <%= error_tag(f, :function, "fo-error error2") %>
+    {label(f, :function, class: "label2")}
+    {text_input(f, :function, class: "input2", disabled: @capturing?)}
+    {error_tag(f, :function, "fo-error error2")}
 
-    <%= label(f, :arity, class: "label3") %>
-    <%= number_input(f, :arity, class: "input3", disabled: @capturing?) %>
-    <%= error_tag(f, :arity, "fo-error error3") %>
+    {label(f, :arity, class: "label3")}
+    {number_input(f, :arity, class: "input3", disabled: @capturing?)}
+    {error_tag(f, :arity, "fo-error error3")}
 
-    <%= label(f, :timeout, class: "label4") %>
-    <%= number_input(f, :timeout, class: "input4", disabled: @capturing?) %>
-    <%= error_tag(f, :timeout, "fo-error error4") %>
+    {label(f, :timeout, class: "label4")}
+    {number_input(f, :timeout, class: "input4", disabled: @capturing?)}
+    {error_tag(f, :timeout, "fo-error error4")}
 
-    <%= submit("Flame On!", class: "submit", disabled: !@capture_changeset.valid? or @capturing?) %>
+    {submit("Flame On!", class: "submit", disabled: !@capture_changeset.valid? or @capturing?)}
   </.form>
   <br />
   <%= if @capturing? do %>
-    Capturing on <%= target_or_local_node(@target_node) %>...<br />
+    Capturing on {target_or_local_node(@target_node)}...<br />
   <% end %>
   <%= if @capture_timed_out? do %>
     Capture Timed Out<br />
@@ -146,7 +146,7 @@
     <%= if @view_block_path do %>
       <%= for %Block{} = block <- @view_block_path do %>
         <a href="#" phx-click="view_block" phx-target={@myself} phx-value-id={block.id} style="font-size: 12.5px; font-family: monospace">
-          <%= FlameOn.SVG.mfa_to_string(block.function) %>
+          {FlameOn.SVG.mfa_to_string(block.function)}
         </a>
       <% end %>
     <% end %>
