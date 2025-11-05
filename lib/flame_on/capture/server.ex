@@ -73,7 +73,7 @@ defmodule FlameOn.Capture.Server do
     {:noreply, %State{state | stack: stack}}
   end
 
-  def handle_info(:do_stop_trace, state) do
+  def handle_info(:do_stop_trace, %State{} = state) do
     state = %State{state | stack: Stack.finalize_stack(state.stack)}
     [root_block] = state.stack
     send_update(state.config, root_block)

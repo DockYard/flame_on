@@ -1,7 +1,7 @@
 defmodule FlameOn.Capture.Server.Stack do
   alias FlameOn.Capture.Block
 
-  def finalize_stack([root_block]) do
+  def finalize_stack([%Block{} = root_block]) do
     children = Enum.reverse(root_block.children)
     absolute_start = hd(children).absolute_start
     last_child = List.last(children)
