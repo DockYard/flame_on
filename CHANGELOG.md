@@ -1,5 +1,13 @@
 # Changelog
 
+## Next
+
+- Upgrade LiveView to v1.0
+- Update Elixir and Erlang versions
+- Update gettext usage
+- Update arity for Bandit.Pipeline default run function
+- Update function heads to address type warnings
+
 ## 0.7.0
 
 - Add "Download graph as SVG" feature
