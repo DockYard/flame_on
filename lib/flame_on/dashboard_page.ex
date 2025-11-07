@@ -12,7 +12,7 @@ defmodule FlameOn.DashboardPage do
   @impl PageBuilder
   def render(assigns) do
     ~H"""
-    <.live_component module={FlameOn.Component} id="flame_on_component" node={@page.node} } />
+    <.live_component module={FlameOn.Component} id="flame_on_component" node={@page.node} csp_nonces={assigns[:csp_nonces]} />
     """
   end
 end

@@ -15,7 +15,7 @@ defmodule FlameOn.SVG do
     rendered =
       ~H"""
       <svg width="1276" height={@block_height * @top_block.max_child_level} style="background-color: white;" xmlns="http://www.w3.org/2000/svg">
-        <style>
+        <style nonce={get_in(@csp_nonces, [:style])}>
           svg > svg {
             cursor: pointer;
           }

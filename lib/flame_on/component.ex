@@ -55,6 +55,8 @@ defmodule FlameOn.Component do
         socket
       end
 
+    socket = assign(socket, :csp_nonces, assigns[:csp_nonces])
+
     {:ok, socket}
   end
 
