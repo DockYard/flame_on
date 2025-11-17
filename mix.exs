@@ -62,7 +62,7 @@ defmodule FlameOn.MixProject do
       {:meck, "~> 0.9.2"},
       {:gettext, "~> 0.21"},
       {:jason, "~> 1.0"},
-      {:phoenix_ecto, "~> 4.6.1"},
+      {:phoenix_ecto, "~> 4.7.0"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:phoenix_live_view, "~> 1.0"},
       {:phoenix_html, "~> 4.0"},
