@@ -87,16 +87,14 @@ defmodule FlameOn.Capture.ServerTest do
       assert {:ok, _set} = ETS.Set.wrap_existing(Server)
     end
 
-    # Mocking MyModule fails - needs to use a real module that exists
-    @tag :skip
     test "sets up starter block in stack" do
-      config = build_config(module: MyModule, function: :my_function, arity: 2)
+      config = build_config(module: FlameOnTest.ExampleModule, function: :foo, arity: 0)
       {:ok, _pid} = Server.start(config)
 
       state = :sys.get_state(Server)
 
       assert [starter] = state.stack
-      assert starter.function == {MyModule, :my_function, 2}
+      assert starter.function == {FlameOnTest.ExampleModule, :foo, 0}
       assert starter.id == "starter"
       assert starter.absolute_start == 0
     end
@@ -285,8 +283,6 @@ defmodule FlameOn.Capture.ServerTest do
   end
 
   describe "mock_function/1" do
-    # Module already mocked from previous test - :meck.unload in setup not working correctly
-    @tag :skip
     test "creates a :meck mock for the module" do
       config = build_config(module: FlameOnTest.ExampleModule, function: :foo)
 
@@ -295,8 +291,6 @@ defmodule FlameOn.Capture.ServerTest do
       assert :meck.validate(FlameOnTest.ExampleModule)
     end
 
-    # Module already mocked from previous test - :meck.unload in setup not working correctly
-    @tag :skip
     test "uses unstick and passthrough options" do
       config = build_config(module: FlameOnTest.ExampleModule)
 
