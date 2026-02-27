@@ -73,7 +73,7 @@ defmodule FlameOn.Capture.Server do
     {:noreply, %State{state | stack: stack}}
   end
 
-  def handle_info(:do_stop_trace, state) do
+  def handle_info(:do_stop_trace, %State{} = state) do
     state = %State{state | stack: Stack.finalize_stack(state.stack)}
     [root_block] = state.stack
     send_update(state.config, root_block)
@@ -109,5 +109,5 @@ defmodule FlameOn.Capture.Server do
     :ok = :meck.expect(config.module, config.function, fun)
   end
 
-  def microseconds({mega, secs, micro}), do: mega * 1000 * 1000 * 1000 * 1000 + secs * 1000 * 1000 + micro
+  def microseconds({mega, secs, micro}), do: mega * 1_000_000_000_000 + secs * 1_000_000 + micro
 end

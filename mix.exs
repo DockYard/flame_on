@@ -56,11 +56,11 @@ defmodule FlameOn.MixProject do
     [
       {:ets, "~> 0.9.0"},
       {:dialyxir, "~> 1.4.1", only: [:dev, :test], runtime: false},
-      {:mix_test_watch, "~> 1.1.0", only: :dev, runtime: false},
+      {:mix_test_watch, "~> 1.4", only: :dev, runtime: false},
       {:ex_doc, "~> 0.28.0", only: :dev, runtime: false},
       {:ecto, "~> 3.7"},
       {:meck, "~> 0.9.2"},
-      {:gettext, "~> 0.21"},
+      {:gettext, "~> 0.21 or ~> 1.0"},
       {:jason, "~> 1.0"},
       {:phoenix_ecto, "~> 4.7.0"},
       {:phoenix_live_dashboard, "~> 0.8.3"},

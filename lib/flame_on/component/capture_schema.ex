@@ -13,7 +13,7 @@ defmodule FlameOn.Component.CaptureSchema do
   end
 
   @default_cowboy_attrs %{module: "cowboy_handler", function: "execute", arity: 2, timeout: 15000}
-  @default_bandit_attrs %{module: "Bandit.Pipeline", function: "run", arity: 4, timeout: 15000}
+  @default_bandit_attrs %{module: "Bandit.Pipeline", function: "run", arity: 5, timeout: 15000}
 
   def changeset(node, attrs \\ nil) do
     attrs = attrs || default_attrs(node)

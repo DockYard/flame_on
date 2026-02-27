@@ -28,3 +28,9 @@ flame_on-*.tar
 .DS_Store
 
 /plts/
+
+.envrc
+
+.claude/
+.mcp.json
+CLAUDE.local.md

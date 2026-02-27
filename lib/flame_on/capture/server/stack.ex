@@ -1,7 +1,18 @@
 defmodule FlameOn.Capture.Server.Stack do
   alias FlameOn.Capture.Block
 
-  def finalize_stack([root_block]) do
+  def finalize_stack([%Block{children: []} = root_block]) do
+    root_block = %Block{
+      root_block
+      | duration: 0
+    }
+
+    root_block = populate_levels(root_block, 0)
+
+    [root_block]
+  end
+
+  def finalize_stack([%Block{} = root_block]) do
     children = Enum.reverse(root_block.children)
     absolute_start = hd(children).absolute_start
     last_child = List.last(children)

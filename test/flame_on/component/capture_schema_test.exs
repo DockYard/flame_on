@@ -48,6 +48,8 @@ defmodule FlameOn.Component.CaptureSchemaTest do
       true = :erlang.check_old_code(FlameOnTest.ExampleModule)
 
       assert %Changeset{valid?: true} = CaptureSchema.changeset(Node.self(), @valid_attrs)
+
+      :meck.unload(FlameOnTest.ExampleModule)
     end
   end
 
