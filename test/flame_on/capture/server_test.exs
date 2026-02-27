@@ -7,9 +7,8 @@ defmodule FlameOn.Capture.ServerTest do
 
   setup do
     on_exit(fn ->
-      if Process.whereis(Server) do
-        Process.exit(Process.whereis(Server), :kill)
-        Process.sleep(100)
+      if pid = Process.whereis(Server) do
+        GenServer.stop(pid, :normal)
       end
 
       case ETS.Set.wrap_existing(Server) do
@@ -149,6 +148,7 @@ defmodule FlameOn.Capture.ServerTest do
     end
 
     test "handles :out trace message for sleep" do
+      Logger.configure(level: :debug)
       config = build_config()
       {:ok, pid} = Server.start(config)
 
@@ -157,6 +157,8 @@ defmodule FlameOn.Capture.ServerTest do
           send(pid, {:trace_ts, self(), :out, {:example, :foo, 0}, {0, 1000, 0}})
           Process.sleep(10)
         end)
+
+      Logger.configure(level: :warning)
 
       state = :sys.get_state(pid)
 
@@ -167,17 +169,22 @@ defmodule FlameOn.Capture.ServerTest do
     end
 
     test "handles :in trace message for sleep" do
+      Logger.configure(level: :debug)
       config = build_config()
       {:ok, pid} = Server.start(config)
 
-      send(pid, {:trace_ts, self(), :out, {:example, :foo, 0}, {0, 1000, 0}})
-      Process.sleep(10)
+      capture_log(fn ->
+        send(pid, {:trace_ts, self(), :out, {:example, :foo, 0}, {0, 1000, 0}})
+        Process.sleep(10)
+      end)
 
       log =
         capture_log(fn ->
           send(pid, {:trace_ts, self(), :in, {:example, :foo, 0}, {0, 2000, 0}})
           Process.sleep(10)
         end)
+
+      Logger.configure(level: :warning)
 
       state = :sys.get_state(pid)
 
@@ -188,6 +195,7 @@ defmodule FlameOn.Capture.ServerTest do
     end
 
     test "logs trace messages at debug level" do
+      Logger.configure(level: :debug)
       config = build_config()
       {:ok, pid} = Server.start(config)
 
@@ -196,6 +204,8 @@ defmodule FlameOn.Capture.ServerTest do
           send(pid, {:trace_ts, self(), :call, {:example, :foo, 0}, :arity, {0, 1000, 0}})
           Process.sleep(10)
         end)
+
+      Logger.configure(level: :warning)
 
       assert log =~ "flame_on trace: call"
       assert log =~ "{:example, :foo, 0}"
