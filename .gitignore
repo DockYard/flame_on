@@ -32,3 +32,5 @@ flame_on-*.tar
 .envrc
 
 .claude/
+.mcp.json
+CLAUDE.local.md
