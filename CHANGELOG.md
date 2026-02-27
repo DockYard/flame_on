@@ -8,6 +8,7 @@
 - Update arity for Bandit.Pipeline default run function
 - Update function heads to address type warnings
 - Add comprehensive tests
+- Widen gettext dependency to support 0.21.x and 1.0.x
 
 ## 0.7.0
 
