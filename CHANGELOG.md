@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 1.0.0 (2026-02-27)
 
 - Upgrade LiveView to v1.0
 - Update Elixir and Erlang versions
@@ -10,6 +10,8 @@
 - Add comprehensive tests
 - Widen gettext dependency to support 0.21.x and 1.0.x
 - Fix flaky test caused by missing meck cleanup in CaptureSchemaTest
+- Fix black flame graph blocks in Firefox
+- Fix inline style to resolve LiveDashboard CSP issues
 
 ## 0.7.0
 
