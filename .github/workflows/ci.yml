@@ -31,19 +31,17 @@ jobs:
         id: mix-deps-cache
         with:
           path: deps
-          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps-${{ github.event.pull_request.base.sha }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
           restore-keys: |
-            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps-${{ github.event.pull_request.base.sha }}-
-            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps
+            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps-
 
       - name: Retrieve Mix Build Cache
         uses: actions/cache@v4
         id: mix-build-cache
         with:
           path: _build/test/lib
-          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-build-${{ github.event.pull_request.base.sha }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
           restore-keys: |
-            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-build-${{ github.event.pull_request.base.sha }}-
             v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-build-
 
       - name: Install Mix Dependencies
@@ -75,9 +73,8 @@ jobs:
         id: plt-cache
         with:
           path: plts
-          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plts-${{ github.event.pull_request.base.sha }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plts-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
           restore-keys: |
-            v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plts-${{ github.event.pull_request.base.sha }}-
             v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-plts-
 
       - name: Run dialyzer
