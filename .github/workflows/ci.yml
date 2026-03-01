@@ -16,16 +16,16 @@ jobs:
         otp: ["28.1.1"]
         elixir: ["1.19.2"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup elixir
-        uses: erlef/setup-beam@v1
+        uses: erlef/setup-beam@v1.20.4
         with:
           elixir-version: ${{ matrix.elixir }}
           otp-version: ${{ matrix.otp }}
 
       - name: Retrieve Mix Dependencies Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-deps-cache
         with:
           path: deps
@@ -35,7 +35,7 @@ jobs:
             v1-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-deps
 
       - name: Retrieve Mix Build Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: mix-build-cache
         with:
           path: _build/test/lib
@@ -69,7 +69,7 @@ jobs:
         run: mix test
 
       - name: Retrieve PLT Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: plt-cache
         with:
           path: plts

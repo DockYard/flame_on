@@ -1,5 +1,10 @@
 # Changelog
 
+## Next
+
+- Update ex_doc to 0.40
+- Update GitHub Actions versions (checkout v4, cache v4, setup-beam v1.20.4)
+
 ## 1.0.0 (2026-02-27)
 
 - Upgrade LiveView to v1.0
