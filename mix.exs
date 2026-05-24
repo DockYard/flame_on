@@ -60,7 +60,7 @@ defmodule FlameOn.MixProject do
       {:mix_test_watch, "~> 1.4", only: :dev, runtime: false},
       {:ex_doc, "~> 0.40", only: :dev, runtime: false},
       {:ecto, "~> 3.7"},
-      {:meck, "~> 0.9.2"},
+      {:meck, "~> 0.9 or ~> 1.0"},
       {:gettext, "~> 0.21 or ~> 1.0"},
       {:jason, "~> 1.0"},
       {:phoenix_ecto, "~> 4.7.0"},
