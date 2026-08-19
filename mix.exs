@@ -63,8 +63,9 @@ defmodule FlameOn.MixProject do
       {:meck, "~> 0.9 or ~> 1.0"},
       {:gettext, "~> 0.21 or ~> 1.0"},
       {:jason, "~> 1.0"},
+      {:lazy_html, ">= 0.1.0", only: :test},
       {:phoenix_ecto, "~> 4.7.0"},
-      {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:phoenix_live_dashboard, "~> 0.8.3 or ~> 0.9"},
       {:phoenix_live_view, "~> 1.0"},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_html_helpers, "~> 1.0.1"}

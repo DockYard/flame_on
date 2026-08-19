@@ -2,6 +2,8 @@
 
 ## Next
 
+- Widen phoenix_live_dashboard dependency to support 0.9.x
+- Add LiveDashboard integration tests covering the Flame On page
 - Update ex_doc to 0.40
 - Update GitHub Actions versions (checkout v4, cache v4, setup-beam v1.20.4)
 
